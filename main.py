@@ -30,16 +30,17 @@ def create_selects(color):
     sprite.updateImage()
 
 class Caractere(pygame.sprite.Sprite):
-  def __init__(self, xstart, ystart, image, description, color):
+  def __init__(self, xstart, ystart, image, description, color, index_charmap):
     super().__init__()
     self.image = pygame.image.load(f'images/{image}')
     self.image = pygame.transform.scale2x(self.image)
     self.rect = self.image.get_rect(topleft = (xstart, ystart))
-    self.name = image
 
+    self.name = image
     self.description = description
     self.pos = pygame.math.Vector2(xstart, ystart)
     self.color = color
+    self.index_charmap = index_charmap
 
     self.control_mouse_press = False
   
@@ -115,12 +116,14 @@ class Button(pygame.sprite.Sprite):
     self.display()
 
 class Matrix(pygame.sprite.Sprite):
-  def __init__(self, xstart, ystart, image):
+  def __init__(self, xstart, ystart, image, index_charmap, index_color):
     super().__init__()
-    self.image = pygame.Surface((16, 16))
-    #pygame.image.load(f'images/{image}.png').convert_alpha()
-    #self.image = pygame.transform.scale2x(self.image)
+    self.image = pygame.image.load(f'images/{image}.png').convert_alpha()
+    self.image = pygame.transform.scale2x(self.image)
     self.rect = self.image.get_rect(topleft = (xstart, ystart))
+
+    self.index_charmap = index_charmap
+    self.index_color = index_color
 
 pygame.init()
 screen_x = 450 * 2
@@ -186,7 +189,7 @@ xstart = 30
 ystart = 60
 for i in range(4):
   for j in range(32):
-    caractere_group.add(Caractere(xstart+j*20, ystart+i*20, f's{32*i+j}.png', charmapDescription[32*i+j], colorSequence[0]))
+    caractere_group.add(Caractere(xstart+j*20, ystart+i*20, f's{32*i+j}.png', charmapDescription[32*i+j], 0, 32*i+j))
 
 # Add color palette
 xstart = 710
@@ -200,7 +203,7 @@ xstart = 30
 ystart = 160
 for i in range(30):
   for j in range(40):
-    matrix_group.add(Matrix(xstart+j*16, ystart+i*16, f'm{32*i+j}'))
+    matrix_group.add(Matrix(xstart+j*16, ystart+i*16, f'm{32*i+j}', 32*i+j, 0))
 
 while True:
   events = pygame.event.get()
