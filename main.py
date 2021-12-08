@@ -1,5 +1,4 @@
 import pygame, sys
-import pygame_textinput
 from os import walk
 from PIL import Image
 import numpy as np
@@ -45,6 +44,10 @@ def changeCharacterSelected(index_charmap, color):
 def updateCharacter(color, index_charmap):
   generateChar(colorSequence[color], charmap[index_charmap], f's{index_charmap}')
   create_selects(color)
+  for sprite in matrix_group.sprites():
+    if sprite.index_charmap == index_charmap_global:
+      generateChar(colorSequence[sprite.index_color], charmap[index_charmap], f's{index_charmap}')
+      sprite.updateCharmap(index_charmap, f's{index_charmap}')
 
 class Charactere(pygame.sprite.Sprite):
   def __init__(self, xstart, ystart, image, description, color, index_charmap):
@@ -60,9 +63,13 @@ class Charactere(pygame.sprite.Sprite):
     self.index_charmap = index_charmap
 
     self.control_mouse_press = False
+    global index_charmap_global
+    index_charmap_global = 0
   
   def detection_click(self):
     if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
+      global index_charmap_global
+      index_charmap_global = self.index_charmap
       self.control_mouse_press = True
       changeCharacterSelected(self.index_charmap, self.color)
     if pygame.mouse.get_pressed()[0] and not self.rect.collidepoint(pygame.mouse.get_pos()):
@@ -138,28 +145,30 @@ class ColorPalette(pygame.sprite.Sprite):
     if color == [255,255,255]:
       self.selection = True
     else: self.selection = False
+    global index_color_global
+    index_color_global = 0
   
   def display(self):
     screen.blit(self.image, self.rect)
 
   def detection_click(self):
     if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
+      global index_color_global
+      index_color_global = self.index
       self.pos = pygame.mouse.get_pos()
       self.remove_detection()
       self.selection = True
       updateColors(self.index)
     if self.selection:
-      marcacao = pygame.image.load('marcacao.png').convert_alpha()
-      marcacao = pygame.transform.scale(marcacao, (36, 36))
-      screen.blit(marcacao, (self.rect.topleft - pygame.math.Vector2(2, 2)))
+      pygame.draw.lines(screen, 'black', True, (self.rect.topleft, self.rect.topright, self.rect.bottomright, self.rect.bottomleft), 2)
   
   def remove_detection(self):
     for sprite in palette_group.sprites():
       sprite.selection = False
   
   def update(self):
-    self.detection_click()
     self.display()
+    self.detection_click()
 
 class Button(pygame.sprite.Sprite):
   def __init__(self, posx, posy, text, color, width, height, text_size):
@@ -176,6 +185,10 @@ class Button(pygame.sprite.Sprite):
   def detectButton(self):
     if self.text == 'Salvar Alteração':
       self.saveChange()
+    if self.text == 'Gerar charmap':
+      self.generateCharmap()
+    if self.text == 'Gerar tela':
+      self.generateScreen()
   
   def saveChange(self):
     if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
@@ -198,6 +211,29 @@ class Button(pygame.sprite.Sprite):
       charmap[indexAux] = newCharmap
       updateCharacter(colorAux, indexAux)
 
+  def generateCharmap(self):
+    if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
+      charmapFile = open("charmap.mif", 'w+')
+      charmapFile.writelines('WIDTH=8;\nDEPTH=1024;\n\nADDRESS_RADIX=UNS;\nDATA_RADIX=BIN;\n\nCONTENT BEGIN\n\n')
+
+      for index, char in enumerate(charmap):
+        charmapFile.writelines(f'-- [{index}] {charmapDescription[index]}\n')
+        for index_row, row in enumerate(char):
+          charmapFile.writelines(f'	{index*8 + index_row}  :   {row};\n')
+        charmapFile.writelines('\n')
+      charmapFile.writelines('END;')
+      charmapFile.close()
+  
+  def generateScreen(self):
+    if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
+      screenFile = open(f'{user_text}.asm', 'w+')
+      screenFile.writelines(f'{user_text} : var #1200')
+      for index, sprite in enumerate(matrix_group.sprites()):
+        if index %40 == 0:
+          screenFile.writelines(f'\n  ;Linha {index // 40}\n')
+        screenFile.writelines(f'  static {user_text} + #{index}, #{int(sprite.index_color) * 256 + int(sprite.index_charmap)}\n')
+      screenFile.close()
+
   def display(self):
     screen.blit(self.text_render, self.text_rect)
   
@@ -206,23 +242,49 @@ class Button(pygame.sprite.Sprite):
     self.detectButton()
 
 class Matrix(pygame.sprite.Sprite):
-  def __init__(self, xstart, ystart, image, index_charmap, index_color):
+  def __init__(self, xstart, ystart, image, index_color):
     super().__init__()
     self.image = pygame.image.load(f'images/{image}.png').convert_alpha()
     self.image = pygame.transform.scale2x(self.image)
     self.rect = self.image.get_rect(topleft = (xstart, ystart))
 
-    self.index_charmap = index_charmap
+    self.index_charmap = 32
     self.index_color = index_color
+  
+  def selection(self):
+    if pygame.mouse.get_pos():
+      if self.rect.collidepoint(pygame.mouse.get_pos()):
+        pygame.draw.lines(screen, 'white', True, (self.rect.topleft, self.rect.topright, self.rect.bottomright, self.rect.bottomleft))
+        if pygame.mouse.get_pressed()[0]:
+          self.index_charmap = index_charmap_global
+          self.index_color = index_color_global
+          self.image = pygame.image.load(f'images/s{self.index_charmap}.png').convert_alpha()
+          self.image = pygame.transform.scale2x(self.image)
+
+  def updateCharmap(self, index_charmap, name_image):
+    self.index_charmap = index_charmap
+    self.image = pygame.image.load(f'images/{name_image}.png').convert_alpha()
+    self.image = pygame.transform.scale2x(self.image)
+
+  def update(self):
+    self.selection()
 
 pygame.init()
 screen_x = 450 * 2
 screen_y = 350 * 2
 screen = pygame.display.set_mode((screen_x, screen_y))
+pygame.display.set_caption('Gerador de tela Assembly ICMC')
+pygame.display.set_icon(pygame.image.load('icon.png').convert_alpha())
 clock = pygame.time.Clock()
 
 # Text input
-textinput = pygame_textinput.TextInputVisualizer()
+fontetxtInput = pygame.font.SysFont('None', 28)
+user_text = ''
+input_rect = pygame.Rect(705, 450, 165, 32)
+colorInputOn = pygame.Color(220, 220, 220)
+colorInputOff = pygame.Color(150, 150, 150)
+colorInput = colorInputOff
+activeInput = False
 
 # Colors
 white = [255,255,255]
@@ -268,6 +330,10 @@ fontetxt = pygame.font.SysFont('None', 30)
 fonte_render_edit = fontetxt.render('Editar caractere', True, (30, 30, 30))
 fonte_rect_edit = fonte_render_edit.get_rect(topleft = (710, 200))
 
+fontetxt = pygame.font.SysFont('None', 20)
+fonte_render_name = fontetxt.render('Nome da tela:', True, (30, 30, 30))
+fonte_rect_name = fonte_render_name.get_rect(topleft = (710, 430))
+
 # Groups
 charactere_group = pygame.sprite.Group()
 palette_group = pygame.sprite.Group()
@@ -299,7 +365,7 @@ xstart = 30
 ystart = 160
 for i in range(30):
   for j in range(40):
-    matrix_group.add(Matrix(xstart+j*16, ystart+i*16, f'm{32*i+j}', 32*i+j, 0))
+    matrix_group.add(Matrix(xstart+j*16, ystart+i*16, f'm{32*i+j}', 0))
 
 # Add character selected
 xstart = 710
@@ -309,18 +375,34 @@ for i in range(8):
     characterSelected_group.add(CharacterSelected(xstart+j*17, ystart+i*17))
 
 while True:
-  events = pygame.event.get()
-
-  for event in events:
+  for event in pygame.event.get():
     if event.type == pygame.QUIT:
       pygame.quit()
       sys.exit()
+
+    if event.type == pygame.MOUSEBUTTONDOWN:
+      if input_rect.collidepoint(event.pos):
+        activeInput = True
+      else:
+        activeInput = False
+
+    if event.type == pygame.KEYDOWN:
+      if activeInput == True:
+        if event.key == pygame.K_BACKSPACE:
+          user_text = user_text[:-1]
+        else:
+          user_text += event.unicode
       
   screen.fill((114, 132, 157))
 
+  if activeInput:
+    colorInput = colorInputOn
+  else:
+    colorInput = colorInputOff
+
   # Matrix display
-  matrix_group.update()
   matrix_group.draw(screen)
+  matrix_group.update()
 
   # Palette display
   palette_group.update()
@@ -338,12 +420,15 @@ while True:
   characterSelected_group.update()
   characterSelected_group.draw(screen)
 
-  textinput.update(events)
-  screen.blit(textinput.surface, (710, 450))
+  # Display text input
+  pygame.draw.rect(screen, colorInput, input_rect, border_radius = 5)
+  text_surface = fontetxtInput.render(user_text, True, (30, 30, 30))
+  screen.blit(text_surface, (input_rect.x + 5, input_rect.y + 5))
 
   # Display texts
   screen.blit(fonte_render_title, fonte_rect_title)
   screen.blit(fonte_render_edit, fonte_rect_edit)
+  screen.blit(fonte_render_name, fonte_rect_name)
 
   pygame.display.update()
   clock.tick(60)
