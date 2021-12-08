@@ -226,12 +226,21 @@ class Button(pygame.sprite.Sprite):
   
   def generateScreen(self):
     if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
-      screenFile = open(f'{user_text}.asm', 'w+')
-      screenFile.writelines(f'{user_text} : var #1200')
+      correctTitle = user_text.capitalize().replace(" ", "")
+      if correctTitle == "":
+        correctTitle = "Screen"
+      screenFile = open(f'{correctTitle}.asm', 'w+')
+      screenFile.writelines(f'{correctTitle} : var #1200')
       for index, sprite in enumerate(matrix_group.sprites()):
         if index %40 == 0:
           screenFile.writelines(f'\n  ;Linha {index // 40}\n')
-        screenFile.writelines(f'  static {user_text} + #{index}, #{int(sprite.index_color) * 256 + int(sprite.index_charmap)}\n')
+        screenFile.writelines(f'  static {correctTitle} + #{index}, #{int(sprite.index_color) * 256 + int(sprite.index_charmap)}\n')
+      screenFile.writelines(f'\nprint{correctTitle}Screen:\n  push R0\n  push R1\n  push R2\n  push R3\n')
+      screenFile.writelines(f'\n  loadn R0, #{correctTitle}\n  loadn R1, #0\n  loadn R2, #1200\n')
+      screenFile.writelines(f'\n  print{correctTitle}ScreenLoop:\n')
+      screenFile.writelines(f'\n    add R3,R0,R1\n    loadi R3, R3\n    outchar R3, R1\n    inc R1\n    cmp R1, R2\n')
+      screenFile.writelines(f'\n    jne print{correctTitle}ScreenLoop\n')
+      screenFile.writelines(f'\n  pop R3\n  pop R2\n  pop R1\n  pop R0\n  rts')
       screenFile.close()
 
   def display(self):
