@@ -42,6 +42,10 @@ def changeCharacterSelected(index_charmap, color):
     sprite.updateCharacterSelected(int(bitSequence[cont]), index_charmap, color)
     cont += 1
 
+def updateCharacter(color, index_charmap):
+  generateChar(colorSequence[color], charmap[index_charmap], f's{index_charmap}')
+  create_selects(color)
+
 class Charactere(pygame.sprite.Sprite):
   def __init__(self, xstart, ystart, image, description, color, index_charmap):
     super().__init__()
@@ -169,11 +173,37 @@ class Button(pygame.sprite.Sprite):
     self.text_render = self.fontetxt.render(self.text, True, (30, 30, 30))
     self.text_rect = self.text_render.get_rect(center = (self.rect.center))
 
+  def detectButton(self):
+    if self.text == 'Salvar Alteração':
+      self.saveChange()
+  
+  def saveChange(self):
+    if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
+      newCharmap = []
+      newCharAux = ""
+      indexAux = 0
+      colorAux = 0
+      for index, sprite in enumerate(characterSelected_group.sprites()):
+        if index == 0:
+          indexAux = sprite.index_charmap
+          colorAux = sprite.color
+        if index != 0 and index %8 == 0:
+          newCharmap.append(newCharAux)
+          newCharAux = ""
+        if not sprite.selected:
+          newCharAux += "0"
+        if sprite.selected:
+          newCharAux += "1"
+      newCharmap.append(newCharAux)
+      charmap[indexAux] = newCharmap
+      updateCharacter(colorAux, indexAux)
+
   def display(self):
     screen.blit(self.text_render, self.text_rect)
   
   def update(self):
     self.display()
+    self.detectButton()
 
 class Matrix(pygame.sprite.Sprite):
   def __init__(self, xstart, ystart, image, index_charmap, index_color):
