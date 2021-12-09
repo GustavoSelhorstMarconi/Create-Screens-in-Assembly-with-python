@@ -1,18 +1,13 @@
 import pygame, sys
 from os import walk
-from PIL import Image
-import numpy as np
 import os.path
 from gerarImagem import generateChar, bitImage0, bitImage1
 from charmap import charmap, charmapDescription
 
 def import_folders(path):
   surface_list = []
-
   for _, __, image_files in walk(path):
     for image in image_files:
-      #full_path = path + '/' + image
-      #image_surf = pygame.image.load(full_path).convert_alpha()
       surface_list.append(image)
 
   return surface_list
@@ -47,7 +42,21 @@ def updateCharacter(color, index_charmap):
   for sprite in matrix_group.sprites():
     if sprite.index_charmap == index_charmap_global:
       generateChar(colorSequence[sprite.index_color], charmap[index_charmap], f's{index_charmap}')
-      sprite.updateCharmap(index_charmap, f's{index_charmap}')
+      sprite.updateCharmap(index_charmap, f's{index_charmap}', -1)
+
+def identifyColor(number):
+  colorAux = 0
+  while number > 255:
+    colorAux += 1
+    number -= 256
+  return colorAux
+
+def identifyCharacter(number):
+  colorAux = 0
+  while number > 255:
+    colorAux += 1
+    number -= 256
+  return number
 
 class Charactere(pygame.sprite.Sprite):
   def __init__(self, xstart, ystart, image, description, color, index_charmap):
@@ -69,7 +78,9 @@ class Charactere(pygame.sprite.Sprite):
   def detection_click(self):
     if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
       global index_charmap_global
+      global inputDescriptionText
       index_charmap_global = self.index_charmap
+      inputDescriptionText = self.description
       self.control_mouse_press = True
       changeCharacterSelected(self.index_charmap, self.color)
     if pygame.mouse.get_pressed()[0] and not self.rect.collidepoint(pygame.mouse.get_pos()):
@@ -78,6 +89,9 @@ class Charactere(pygame.sprite.Sprite):
   def updateImage(self):
     self.image = pygame.image.load(f'images/{self.name}')
     self.image = pygame.transform.scale2x(self.image)
+    if self.index_charmap == index_charmap_global:
+      self.description = inputDescriptionText
+      charmapDescription[self.index_charmap] = inputDescriptionText
   
   def update(self):
     self.detection_click()
@@ -125,7 +139,7 @@ class CharacterSelected(pygame.sprite.Sprite):
   def display_text(self):
     fontetxt = pygame.font.SysFont('None', 40)
     fonte_render = fontetxt.render(str(self.index_charmap), True, (30, 30, 30))
-    fonte_rect = fonte_render.get_rect(center = (875, 360))
+    fonte_rect = fonte_render.get_rect(center = (875, 330))
     screen.blit(fonte_render, fonte_rect)
   
   def update(self):
@@ -185,12 +199,14 @@ class Button(pygame.sprite.Sprite):
   def detectButton(self):
     if self.text == 'Salvar Alteração':
       self.saveChange()
-    if self.text == 'Gerar charmap':
+    elif self.text == 'Gerar Charmap':
       self.generateCharmap()
-    if self.text == 'Gerar tela':
+    elif self.text == 'Gerar Tela':
       self.generateScreen()
-    if self.text == 'Apagar Tela':
+    elif self.text == 'Apagar Tela':
       self.deleteScreen()
+    elif self.text == 'Importar Tela':
+      self.loadScreen()
   
   def saveChange(self):
     if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
@@ -253,6 +269,20 @@ class Button(pygame.sprite.Sprite):
       for i in range(30):
         for j in range(40):
           matrix_group.add(Matrix(xstart+j*16, ystart+i*16, f'm{32*i+j}', 0))
+  
+  def loadScreen(self):
+    if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
+      nameScreen = user_text.replace(" ", "")
+      if nameScreen == "": nameScreen = 'Screen'
+      if os.path.isfile(f'{nameScreen}.asm'):
+        screenFile = open(f'{nameScreen}.asm', 'r+')
+        lines = screenFile.readlines()
+        colorVectorAux = []
+        for line in lines:
+          if line.find('+') != -1:
+            colorVectorAux.append(line[line.rfind('#') + 1:-1])
+        for index, sprite in enumerate(matrix_group.sprites()):
+          sprite.updateCharmap(identifyCharacter(int(colorVectorAux[index])), f's{identifyCharacter(int(colorVectorAux[index]))}', identifyColor(int(colorVectorAux[index])))
 
   def display(self):
     screen.blit(self.text_render, self.text_rect)
@@ -284,10 +314,17 @@ class Matrix(pygame.sprite.Sprite):
           self.index_charmap = 127
           self.index_color = 15
 
-  def updateCharmap(self, index_charmap, name_image):
+  def updateCharmap(self, index_charmap, name_image, color):
     self.index_charmap = index_charmap
-    self.image = pygame.image.load(f'images/{name_image}.png').convert_alpha()
-    self.image = pygame.transform.scale2x(self.image)
+    if color != -1:
+      self.index_color = color
+      generateChar(colorSequence[self.index_color], charmap[index_charmap], 'aux')
+      self.image = pygame.image.load(f'images/aux.png').convert_alpha()
+      self.image = pygame.transform.scale2x(self.image)
+
+    else:
+      self.image = pygame.image.load(f'images/{name_image}.png').convert_alpha()
+      self.image = pygame.transform.scale2x(self.image)
 
   def update(self):
     self.selection()
@@ -308,6 +345,13 @@ colorInputOn = pygame.Color(220, 220, 220)
 colorInputOff = pygame.Color(150, 150, 150)
 colorInput = colorInputOff
 activeInput = False
+
+inputDescriptionText = ''
+inputDescriptionRect = pygame.Rect(705, 350, 145, 25)
+colorDescriptionInputOn = pygame.Color(220, 220, 220)
+colorDescriptionInputOff = pygame.Color(150, 150, 150)
+colorDescriptionInput = colorInputOff
+activeDescriptionInput = False
 
 # Colors
 white = [255,255,255]
@@ -341,9 +385,6 @@ for i in range(128):
 for i in range(16):
   generateChar(colorSequence[i],bitImage0,f"p{i}")
 
-for i in range(1200):
-  generateChar(black,bitImage0,f"m{i}")
-
 # Texts
 fontetxt = pygame.font.SysFont('None', 40)
 fonte_render_title = fontetxt.render('Gerador de Tela Assembly ICMC', True, (30, 30, 30))
@@ -351,7 +392,7 @@ fonte_rect_title = fonte_render_title.get_rect(center = (screen_x / 2 - 110, 30)
 
 fontetxt = pygame.font.SysFont('None', 30)
 fonte_render_edit = fontetxt.render('Editar caractere', True, (30, 30, 30))
-fonte_rect_edit = fonte_render_edit.get_rect(topleft = (710, 200))
+fonte_rect_edit = fonte_render_edit.get_rect(topleft = (710, 180))
 
 fontetxt = pygame.font.SysFont('None', 20)
 fonte_render_name = fontetxt.render('Nome da tela:', True, (30, 30, 30))
@@ -369,10 +410,11 @@ matrix_group = pygame.sprite.Group()
 characterSelected_group = pygame.sprite.Group()
 
 # Add button
-button_group.add(Button(710, 500, 'Gerar tela', (119, 221, 119), 160, 60, 30))
-button_group.add(Button(710, 580, 'Gerar charmap', (119, 221, 119), 160, 60, 30))
-button_group.add(Button(710, 380, 'Salvar Alteração', (119, 221, 119), 135, 25, 20))
+button_group.add(Button(710, 500, 'Gerar Tela', (119, 221, 119), 160, 45, 30))
+button_group.add(Button(710, 560, 'Gerar Charmap', (119, 221, 119), 160, 45, 30))
+button_group.add(Button(710, 390, 'Salvar Alteração', (119, 221, 119), 135, 25, 20))
 button_group.add(Button(30, 650, 'Apagar Tela', (194, 59, 34), 135, 25, 20))
+button_group.add(Button(710, 620, 'Importar Tela', (119, 221, 119), 160, 45, 30))
 
 # Add character
 xstart = 30
@@ -397,7 +439,7 @@ for i in range(30):
 
 # Add character selected
 xstart = 710
-ystart = 240
+ystart = 210
 for i in range(8):
   for j in range(8):
     characterSelected_group.add(CharacterSelected(xstart+j*17, ystart+i*17))
@@ -413,6 +455,10 @@ while True:
         activeInput = True
       else:
         activeInput = False
+      if inputDescriptionRect.collidepoint(event.pos):
+        activeDescriptionInput = True
+      else:
+        activeDescriptionInput = False
 
     if event.type == pygame.KEYDOWN:
       if activeInput == True:
@@ -420,6 +466,11 @@ while True:
           user_text = user_text[:-1]
         else:
           user_text += event.unicode
+      if activeDescriptionInput == True:
+        if event.key == pygame.K_BACKSPACE:
+          inputDescriptionText = inputDescriptionText[:-1]
+        else:
+          inputDescriptionText += event.unicode
       
   screen.fill((114, 132, 157))
 
@@ -427,6 +478,11 @@ while True:
     colorInput = colorInputOn
   else:
     colorInput = colorInputOff
+  
+  if activeDescriptionInput:
+    colorDescriptionInput = colorDescriptionInputOn
+  else:
+    colorDescriptionInput = colorDescriptionInputOff
 
   # Matrix display
   matrix_group.draw(screen)
@@ -452,6 +508,10 @@ while True:
   pygame.draw.rect(screen, colorInput, input_rect, border_radius = 5)
   text_surface = fontetxtInput.render(user_text, True, (30, 30, 30))
   screen.blit(text_surface, (input_rect.x + 5, input_rect.y + 5))
+
+  pygame.draw.rect(screen, colorDescriptionInput, inputDescriptionRect, border_radius = 5)
+  text_description_surface = fontetxtInput.render(inputDescriptionText, True, (30, 30, 30))
+  screen.blit(text_description_surface, (inputDescriptionRect.x + 5, inputDescriptionRect.y + 5))
 
   # Display texts
   screen.blit(fonte_render_title, fonte_rect_title)

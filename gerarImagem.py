@@ -12,7 +12,6 @@ def generateChar(color,bitImage,fileName):
             data[i:i+1, j:j+1] = colorSelect[int(bitImage[i][j])]
     img = Image.fromarray(data, 'RGB')
     img.save(f'./images/{fileName}.png')
-    #img.show()
 
 bitImage0 =  [
                 [1,1,1,1,1,1,1,1],
