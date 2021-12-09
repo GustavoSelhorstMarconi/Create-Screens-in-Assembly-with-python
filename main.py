@@ -1,7 +1,7 @@
 import pygame, sys
 from os import walk
 import os.path
-from imageFilesFunctions import generateChar, import_folders
+from imageFilesFunctions import generateChar, import_folders, joinImage
 from charmap import charmap, charmapDescription
 
 def updateColors(color):
@@ -193,7 +193,7 @@ class Button(pygame.sprite.Sprite):
       self.saveChange()
     elif self.text == 'Gerar Charmap':
       self.generateCharmap()
-    elif self.text == 'Gerar Tela':
+    elif self.text == 'Gerar Tela': 
       self.generateScreen()
     elif self.text == 'Apagar Tela':
       self.deleteScreen()
@@ -252,6 +252,10 @@ class Button(pygame.sprite.Sprite):
       screenFile.writelines(f'\n    jne print{correctTitle}ScreenLoop\n')
       screenFile.writelines(f'\n  pop R3\n  pop R2\n  pop R1\n  pop R0\n  rts')
       screenFile.close()
+      for index, sprite in enumerate(matrix_group.sprites()):
+        generateChar(colorSequence[sprite.index_color],charmap[sprite.index_charmap],f"m{index}")
+      imageNameSequence = import_folders('images')
+      joinImage(imageNameSequence, user_text)
   
   def deleteScreen(self):
     if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
@@ -375,7 +379,6 @@ bitImage0 =  [
                 [1,1,1,1,1,1,1,1],
                 [1,1,1,1,1,1,1,1],
                 [1,1,1,1,1,1,1,1]
-
             ]
 
 # Generate Images
