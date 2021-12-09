@@ -1,16 +1,8 @@
 import pygame, sys
 from os import walk
 import os.path
-from gerarImagem import generateChar, bitImage0, bitImage1
+from imageFilesFunctions import generateChar, import_folders
 from charmap import charmap, charmapDescription
-
-def import_folders(path):
-  surface_list = []
-  for _, __, image_files in walk(path):
-    for image in image_files:
-      surface_list.append(image)
-
-  return surface_list
 
 def updateColors(color):
   create_selects(color)
@@ -373,6 +365,18 @@ black = [0,0,0]
 
 #Color sequence
 colorSequence = [[255,255,255],[165,42,42],[0,255,0],[107,142,35],[35,35,142],[135,31,120],[0,128,128],[220,232,250],[190,190,190],[255,0,0],[50,205,50],[255,255,0],[0,0,255],[255,28,174],[122,219,147],[0,0,0]]
+
+bitImage0 =  [
+                [1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,1,1]
+
+            ]
 
 # Generate Images
 newpath = r'images'
