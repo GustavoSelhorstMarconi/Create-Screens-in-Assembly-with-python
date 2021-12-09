@@ -26,7 +26,10 @@ def joinImage(imageList, name):
   images = []
 
   for i in range(1200):
-    images.append(Image.open(f'images/m{i}.png'))
+    temp = Image.open(f'images/m{i}.png')
+    keep = temp.copy()
+    images.append(keep)
+    temp.close()
   new_im = Image.new('RGB', (40 * 8, 30 * 8))
 
   x_offset = 0
