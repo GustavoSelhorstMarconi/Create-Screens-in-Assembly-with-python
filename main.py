@@ -189,6 +189,8 @@ class Button(pygame.sprite.Sprite):
       self.generateCharmap()
     if self.text == 'Gerar tela':
       self.generateScreen()
+    if self.text == 'Apagar Tela':
+      self.deleteScreen()
   
   def saveChange(self):
     if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
@@ -242,6 +244,15 @@ class Button(pygame.sprite.Sprite):
       screenFile.writelines(f'\n    jne print{correctTitle}ScreenLoop\n')
       screenFile.writelines(f'\n  pop R3\n  pop R2\n  pop R1\n  pop R0\n  rts')
       screenFile.close()
+  
+  def deleteScreen(self):
+    if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
+      xstart = 30
+      ystart = 160
+      matrix_group.empty()
+      for i in range(30):
+        for j in range(40):
+          matrix_group.add(Matrix(xstart+j*16, ystart+i*16, f'm{32*i+j}', 0))
 
   def display(self):
     screen.blit(self.text_render, self.text_rect)
@@ -253,11 +264,10 @@ class Button(pygame.sprite.Sprite):
 class Matrix(pygame.sprite.Sprite):
   def __init__(self, xstart, ystart, image, index_color):
     super().__init__()
-    self.image = pygame.image.load(f'images/{image}.png').convert_alpha()
-    self.image = pygame.transform.scale2x(self.image)
+    self.image = pygame.Surface((16, 16))
     self.rect = self.image.get_rect(topleft = (xstart, ystart))
 
-    self.index_charmap = 32
+    self.index_charmap = 127
     self.index_color = index_color
   
   def selection(self):
@@ -269,6 +279,10 @@ class Matrix(pygame.sprite.Sprite):
           self.index_color = index_color_global
           self.image = pygame.image.load(f'images/s{self.index_charmap}.png').convert_alpha()
           self.image = pygame.transform.scale2x(self.image)
+        if pygame.mouse.get_pressed()[2]:
+          self.image = pygame.Surface((16, 16))
+          self.index_charmap = 127
+          self.index_color = 15
 
   def updateCharmap(self, index_charmap, name_image):
     self.index_charmap = index_charmap
@@ -343,6 +357,10 @@ fontetxt = pygame.font.SysFont('None', 20)
 fonte_render_name = fontetxt.render('Nome da tela:', True, (30, 30, 30))
 fonte_rect_name = fonte_render_name.get_rect(topleft = (710, 430))
 
+fontetxt = pygame.font.SysFont('None', 20)
+fonte_render_author = fontetxt.render('Made by Gustavo de Oliveira Martins e Gustavo Selhorst Marconi', True, (30, 30, 30))
+fonte_rect_author = fonte_render_author.get_rect(topleft = (263, 655))
+
 # Groups
 charactere_group = pygame.sprite.Group()
 palette_group = pygame.sprite.Group()
@@ -351,9 +369,10 @@ matrix_group = pygame.sprite.Group()
 characterSelected_group = pygame.sprite.Group()
 
 # Add button
-button_group.add(Button(710, 500, 'Gerar charmap', 'Green', 160, 60, 30))
-button_group.add(Button(710, 580, 'Gerar tela', 'Green', 160, 60, 30))
-button_group.add(Button(710, 380, 'Salvar Alteração', 'Green', 135, 25, 20))
+button_group.add(Button(710, 500, 'Gerar tela', (119, 221, 119), 160, 60, 30))
+button_group.add(Button(710, 580, 'Gerar charmap', (119, 221, 119), 160, 60, 30))
+button_group.add(Button(710, 380, 'Salvar Alteração', (119, 221, 119), 135, 25, 20))
+button_group.add(Button(30, 650, 'Apagar Tela', (194, 59, 34), 135, 25, 20))
 
 # Add character
 xstart = 30
@@ -374,7 +393,7 @@ xstart = 30
 ystart = 160
 for i in range(30):
   for j in range(40):
-    matrix_group.add(Matrix(xstart+j*16, ystart+i*16, f'm{32*i+j}', 0))
+    matrix_group.add(Matrix(xstart+j*16, ystart+i*16, f'm{32*i+j}', 15))
 
 # Add character selected
 xstart = 710
@@ -438,6 +457,7 @@ while True:
   screen.blit(fonte_render_title, fonte_rect_title)
   screen.blit(fonte_render_edit, fonte_rect_edit)
   screen.blit(fonte_render_name, fonte_rect_name)
+  screen.blit(fonte_render_author, fonte_rect_author)
 
   pygame.display.update()
   clock.tick(60)
