@@ -124,7 +124,7 @@ class CharacterSelected(pygame.sprite.Sprite):
         self.image.fill(colorSequence[self.color])
       else:
         self.image.fill('black')
-    
+      clickSong.play()
     elif not pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
       mouse_pressed = False
   
@@ -233,13 +233,18 @@ class Button(pygame.sprite.Sprite):
         charmapFile.writelines('\n')
       charmapFile.writelines('END;')
       charmapFile.close()
+      generateCharmapSong.play()
   
   def generateScreen(self):
     if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
       correctTitle = user_text.capitalize().replace(" ", "")
       if correctTitle == "":
         correctTitle = "Screen"
-      screenFile = open(f'{correctTitle}.asm', 'w+')
+      newpath = r'screens'
+      if not os.path.exists(newpath):
+        os.makedirs(newpath)
+
+      screenFile = open(f'./screens/{correctTitle}.asm', 'w+')
       screenFile.writelines(f'{correctTitle} : var #1200')
       for index, sprite in enumerate(matrix_group.sprites()):
         if index %40 == 0:
@@ -256,6 +261,7 @@ class Button(pygame.sprite.Sprite):
         generateChar(colorSequence[sprite.index_color],charmap[sprite.index_charmap],f"m{index}")
       imageNameSequence = import_folders('images')
       joinImage(imageNameSequence, user_text)
+      generateScreenSong.play()
   
   def deleteScreen(self):
     if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
@@ -265,13 +271,14 @@ class Button(pygame.sprite.Sprite):
       for i in range(30):
         for j in range(40):
           matrix_group.add(Matrix(xstart+j*16, ystart+i*16, f'm{32*i+j}', 0))
+      deleteSong.play()
   
   def loadScreen(self):
     if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
       nameScreen = user_text.replace(" ", "")
       if nameScreen == "": nameScreen = 'Screen'
-      if os.path.isfile(f'{nameScreen}.asm'):
-        screenFile = open(f'{nameScreen}.asm', 'r+')
+      if os.path.isfile(f'./screens/{nameScreen}.asm'):
+        screenFile = open(f'./screens/{nameScreen}.asm', 'r+')
         lines = screenFile.readlines()
         colorVectorAux = []
         for line in lines:
@@ -279,6 +286,7 @@ class Button(pygame.sprite.Sprite):
             colorVectorAux.append(line[line.rfind('#') + 1:-1])
         for index, sprite in enumerate(matrix_group.sprites()):
           sprite.updateCharmap(identifyCharacter(int(colorVectorAux[index])), f's{identifyCharacter(int(colorVectorAux[index]))}', identifyColor(int(colorVectorAux[index])))
+        importSong.play()
 
   def display(self):
     screen.blit(self.text_render, self.text_rect)
@@ -391,6 +399,13 @@ for i in range(128):
 
 for i in range(16):
   generateChar(colorSequence[i],bitImage0,f"p{i}")
+
+# Sounds
+deleteSong = pygame.mixer.Sound("songs/explosion_dull.flac")
+generateScreenSong = pygame.mixer.Sound("songs/sd_0.wav")
+clickSong = pygame.mixer.Sound("songs/click.wav")
+generateCharmapSong = pygame.mixer.Sound("songs/shimmer_1.flac")
+importSong = pygame.mixer.Sound("songs/import.wav")
 
 # Texts
 fontetxt = pygame.font.SysFont('None', 40)

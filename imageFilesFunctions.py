@@ -41,4 +41,4 @@ def joinImage(imageList, name):
     new_im.paste(im, (x_offset, y_offset))
     x_offset += 8
 
-  new_im.save(f'{name}.png')
+  new_im.save(f'./screens/{name}.png')
