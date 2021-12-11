@@ -1,7 +1,7 @@
 import pygame, sys
 from os import walk
 import os.path
-from imageFilesFunctions import generateChar, import_folders, joinImage
+from imageFilesFunctions import generateChar, import_folders, joinImage, joinPersona
 from charmap import charmap, charmapDescription
 
 def updateColors(color):
@@ -199,6 +199,8 @@ class Button(pygame.sprite.Sprite):
       self.deleteScreen()
     elif self.text == 'Importar Tela':
       self.loadScreen()
+    elif self.text == 'Gerar Personagem':
+      self.generatePersona()
   
   def saveChange(self):
     if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
@@ -215,7 +217,7 @@ class Button(pygame.sprite.Sprite):
           newCharAux = ""
         if not sprite.selected:
           newCharAux += "0"
-        if sprite.selected:
+        elif sprite.selected:
           newCharAux += "1"
       newCharmap.append(newCharAux)
       charmap[indexAux] = newCharmap
@@ -287,6 +289,57 @@ class Button(pygame.sprite.Sprite):
         for index, sprite in enumerate(matrix_group.sprites()):
           sprite.updateCharmap(identifyCharacter(int(colorVectorAux[index])), f's{identifyCharacter(int(colorVectorAux[index]))}', identifyColor(int(colorVectorAux[index])))
         importSong.play()
+  
+  def generatePersona(self):
+    if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
+      correctTitle = user_text.capitalize().replace(" ", "")
+      if correctTitle == "":
+        correctTitle = "Persona"
+      persona = []
+      cont = 0
+      for sprite in matrix_group.sprites():
+        if sprite.index_charmap != 127 and sprite.index_color != 15:
+            persona.append([cont, sprite.index_charmap, sprite.index_color])
+        cont += 1
+      newpath = r'persona'
+      if not os.path.exists(newpath):
+        os.makedirs(newpath)
+      personaFile = open(f'./persona/{correctTitle}.asm', 'w+')
+      personaFile.writelines(f'{correctTitle}Position : var #1\n\n')
+      personaFile.writelines(f'{correctTitle} : var #{len(persona)}\n')
+      for index in range(len(persona)):
+        if index != 0:
+          if persona[index][0] - persona[index - 1][0] != 1:
+            personaFile.writelines(f'  ;{persona[index][0] - persona[index - 1][0]}  espacos para o proximo caractere\n')
+        personaFile.writelines(f'  static {correctTitle} + #{index}, #{int(persona[index][2]) * 256 + int(persona[index][1])} ; {charmapDescription[persona[index][1]]}\n')
+      
+      personaFile.writelines(f'\n{correctTitle}Gaps : var #{len(persona)}\n')
+
+      for index in range(len(persona)):
+        if index == 0:
+          personaFile.writelines(f'  static {correctTitle}Gaps + #{index}, #0\n')
+        else:
+          personaFile.writelines(f'  static {correctTitle}Gaps + #{index}, #{persona[index][0] - persona[index - 1][0] - 1}\n')
+
+      personaFile.writelines(f'\nprint{correctTitle}:\n  push R0\n  push R1\n  push R2\n  push R3\n  push R4\n  push R5\n  push R6\n')
+      personaFile.writelines(f'\n  loadn R0, #{correctTitle}\n  loadn R1, #{correctTitle}Gaps\n  load R2, {correctTitle}Position\n')
+      personaFile.writelines(f'  loadn R3, #{len(persona)} ;tamanho {correctTitle}\n  loadn R4, #0 ;incremetador\n')
+      personaFile.writelines(f'\n  print{correctTitle}Loop:\n    add R5,R0,R4\n    loadi R5, R5\n')
+      personaFile.writelines(f'\n    add R6,R1,R4\n    loadi R6, R6\n\n    add R2, R2, R6\n\n    outchar R5, R2\n')
+      personaFile.writelines(f'\n    inc R2\n     inc R4\n     cmp R3, R4\n    jne print{correctTitle}Loop\n')
+      personaFile.writelines(f'\n  pop R0\n  pop R1\n  pop R2\n  pop R3\n  pop R4\n  pop R5\n  pop R6\n  rts\n')
+
+      personaFile.writelines(f'\napagar{correctTitle}:\n  push R0\n  push R1\n  push R2\n  push R3\n  push R4\n  push R5\n')
+      personaFile.writelines(f'\n  loadn R0, #3967\n  loadn R1, #{correctTitle}Gaps\n  load R2, {correctTitle}Position\n')
+      personaFile.writelines(f'  loadn R3, #{len(persona)} ;tamanho {correctTitle}\n  loadn R4, #0 ;incremetador\n')
+      personaFile.writelines(f'\n  apagar{correctTitle}Loop:\n    add R5,R1,R4\n    loadi R5, R5\n')
+      personaFile.writelines(f'\n    add R2,R2,R5\n    outchar R0, R2\n')
+      personaFile.writelines(f'\n    inc R2\n     inc R4\n     cmp R3, R4\n    jne apagar{correctTitle}Loop\n')
+      personaFile.writelines(f'\n  pop R5\n  pop R4\n  pop R3\n  pop R2\n  pop R1\n  pop R0\n  rts\n')
+
+      personaFile.close()
+
+      personaSong.play()
 
   def display(self):
     screen.blit(self.text_render, self.text_rect)
@@ -406,6 +459,7 @@ generateScreenSong = pygame.mixer.Sound("songs/sd_0.wav")
 clickSong = pygame.mixer.Sound("songs/click.wav")
 generateCharmapSong = pygame.mixer.Sound("songs/shimmer_1.flac")
 importSong = pygame.mixer.Sound("songs/import.wav")
+personaSong = pygame.mixer.Sound("songs/completetask_0.mp3")
 
 # Texts
 fontetxt = pygame.font.SysFont('None', 40)
@@ -417,7 +471,7 @@ fonte_render_edit = fontetxt.render('Editar caractere', True, (30, 30, 30))
 fonte_rect_edit = fonte_render_edit.get_rect(topleft = (710, 180))
 
 fontetxt = pygame.font.SysFont('None', 20)
-fonte_render_name = fontetxt.render('Nome da tela:', True, (30, 30, 30))
+fonte_render_name = fontetxt.render('Nome da tela ou personagem:', True, (30, 30, 30))
 fonte_rect_name = fonte_render_name.get_rect(topleft = (710, 430))
 
 fontetxt = pygame.font.SysFont('None', 20)
@@ -432,11 +486,12 @@ matrix_group = pygame.sprite.Group()
 characterSelected_group = pygame.sprite.Group()
 
 # Add button
-button_group.add(Button(710, 500, 'Gerar Tela', (119, 221, 119), 160, 45, 30))
-button_group.add(Button(710, 560, 'Gerar Charmap', (119, 221, 119), 160, 45, 30))
+button_group.add(Button(710, 500, 'Gerar Tela', (119, 221, 119), 160, 35, 25))
+button_group.add(Button(710, 545, 'Importar Tela', (119, 221, 119), 160, 35, 25))
+button_group.add(Button(710, 590, 'Gerar Charmap', (119, 221, 119), 160, 35, 25))
+button_group.add(Button(710, 635, 'Gerar Personagem', (119, 221, 119), 160, 35, 25))
 button_group.add(Button(710, 390, 'Salvar Alteração', (119, 221, 119), 135, 25, 20))
 button_group.add(Button(30, 650, 'Apagar Tela', (194, 59, 34), 135, 25, 20))
-button_group.add(Button(710, 620, 'Importar Tela', (119, 221, 119), 160, 45, 30))
 
 # Add character
 xstart = 30

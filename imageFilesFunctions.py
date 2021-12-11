@@ -42,3 +42,6 @@ def joinImage(imageList, name):
     x_offset += 8
 
   new_im.save(f'./screens/{name}.png')
+
+def joinPersona(persona):
+  pass
