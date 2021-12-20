@@ -272,7 +272,7 @@ class Button(pygame.sprite.Sprite):
       matrix_group.empty()
       for i in range(30):
         for j in range(40):
-          matrix_group.add(Matrix(xstart+j*16, ystart+i*16, f'm{32*i+j}', 0))
+          matrix_group.add(Matrix(xstart+j*16, ystart+i*16, f'm{32*i+j}', 0, 40*i+j))
       deleteSong.play()
   
   def loadScreen(self):
@@ -336,8 +336,12 @@ class Button(pygame.sprite.Sprite):
       personaFile.writelines(f'\n    add R2,R2,R5\n    outchar R0, R2\n')
       personaFile.writelines(f'\n    inc R2\n     inc R4\n     cmp R3, R4\n    jne apagar{correctTitle}Loop\n')
       personaFile.writelines(f'\n  pop R5\n  pop R4\n  pop R3\n  pop R2\n  pop R1\n  pop R0\n  rts\n')
-
       personaFile.close()
+    
+      for character in persona:
+        generateChar(colorSequence[character[2]], charmap[character[1]], f'p{character[0]}')
+
+      joinPersona(persona, user_text)
 
       personaSong.play()
 
@@ -349,18 +353,23 @@ class Button(pygame.sprite.Sprite):
     self.detectButton()
 
 class Matrix(pygame.sprite.Sprite):
-  def __init__(self, xstart, ystart, image, index_color):
+  def __init__(self, xstart, ystart, image, index_color, index):
     super().__init__()
     self.image = pygame.Surface((16, 16))
     self.rect = self.image.get_rect(topleft = (xstart, ystart))
 
     self.index_charmap = 127
     self.index_color = index_color
+    self.index = index
   
   def selection(self):
     if pygame.mouse.get_pos():
       if self.rect.collidepoint(pygame.mouse.get_pos()):
         pygame.draw.lines(screen, 'white', True, (self.rect.topleft, self.rect.topright, self.rect.bottomright, self.rect.bottomleft))
+        global text_total_cords, text_cords_x, text_cords_y
+        text_total_cords = self.index
+        text_cords_x = self.index % 40
+        text_cords_y = self.index // 40
         if pygame.mouse.get_pressed()[0]:
           self.index_charmap = index_charmap_global
           self.index_color = index_color_global
@@ -393,6 +402,9 @@ screen = pygame.display.set_mode((screen_x, screen_y))
 pygame.display.set_caption('Gerador de tela Assembly ICMC')
 pygame.display.set_icon(pygame.image.load('icon.png').convert_alpha())
 clock = pygame.time.Clock()
+text_total_cords = 1199
+text_cords_x = 39
+text_cords_y = 29
 
 # Text input
 fontetxtInput = pygame.font.SysFont('None', 28)
@@ -450,9 +462,6 @@ if not os.path.exists(newpath):
 for i in range(128):
   generateChar(colorSequence[0],charmap[i],f"s{i}")
 
-for i in range(16):
-  generateChar(colorSequence[i],bitImage0,f"p{i}")
-
 # Sounds
 deleteSong = pygame.mixer.Sound("songs/explosion_dull.flac")
 generateScreenSong = pygame.mixer.Sound("songs/sd_0.wav")
@@ -474,9 +483,11 @@ fontetxt = pygame.font.SysFont('None', 20)
 fonte_render_name = fontetxt.render('Nome da tela ou personagem:', True, (30, 30, 30))
 fonte_rect_name = fonte_render_name.get_rect(topleft = (710, 430))
 
-fontetxt = pygame.font.SysFont('None', 20)
+fontetxt = pygame.font.SysFont('None', 18)
 fonte_render_author = fontetxt.render('Made by Gustavo de Oliveira Martins e Gustavo Selhorst Marconi', True, (30, 30, 30))
-fonte_rect_author = fonte_render_author.get_rect(topleft = (263, 655))
+fonte_rect_author = fonte_render_author.get_rect(topleft = (300, 660))
+
+fontetxt = pygame.font.SysFont('None', 20)
 
 # Groups
 charactere_group = pygame.sprite.Group()
@@ -512,7 +523,7 @@ xstart = 30
 ystart = 160
 for i in range(30):
   for j in range(40):
-    matrix_group.add(Matrix(xstart+j*16, ystart+i*16, f'm{32*i+j}', 15))
+    matrix_group.add(Matrix(xstart+j*16, ystart+i*16, f'm{32*i+j}', 15, 40*i+j))
 
 # Add character selected
 xstart = 710
@@ -595,6 +606,14 @@ while True:
   screen.blit(fonte_render_edit, fonte_rect_edit)
   screen.blit(fonte_render_name, fonte_rect_name)
   screen.blit(fonte_render_author, fonte_rect_author)
+
+  fonte_render_total_cords = fontetxt.render(str(text_total_cords), True, (30, 30, 30))
+  fonte_rect_total_cords = fonte_render_total_cords.get_rect(topleft = (210, 650))
+  screen.blit(fonte_render_total_cords, fonte_rect_total_cords)
+
+  fonte_render_cords_xy = fontetxt.render(f'X = {str(text_cords_x)} Y = {str(text_cords_y)}', True, (30, 30, 30))
+  fonte_rect_cords_xy = fonte_render_cords_xy.get_rect(topleft = (185, 665))
+  screen.blit(fonte_render_cords_xy, fonte_rect_cords_xy)
 
   pygame.display.update()
   clock.tick(60)
