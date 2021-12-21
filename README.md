@@ -14,7 +14,8 @@
 - [Vídeo Tutorial](#Vídeo-Tutorial)
 - [Funcionalidades](#Funcionalidades)
 - [Aplicação](#Aplicação)
-  - [Pre Requisitos](#pre-requisitos)
+  - [Pre Requisitos](#Pré-requisitos)
+- [Ferramentas](#🛠-Tecnologias)
   <!--te-->
 
 <h4 align="center"> 
@@ -39,7 +40,31 @@
 
 ### Vídeo Tutorial
 
-<a href=“https://youtu.be/vvJzQRh8cuU“>Tutorial - Como usar a aplicação</a>
+[Tutorial - Como usar a aplicação](https://youtu.be/vvJzQRh8cuU)
 
-<a href=“https://youtu.be/hdT6XAhFqLY“>Flex Grid</a>
-<a href=“https://youtu.be/LrDKQ516Ew0“>Flex Grid</a>
+### Pré-requisitos
+
+[Tutorial - Como Instalar no Windows](https://youtu.be/LrDKQ516Ew0)
+[Tutorial - Como Instalar no Linux](https://youtu.be/hdT6XAhFqLY)
+
+### 🛠 Tecnologias
+
+As seguintes ferramentas foram usadas na construção do projeto:
+
+- [Python](https://www.python.org/)
+- [Pygame](https://www.pygame.org/)
+- [Pillow](https://pillow.readthedocs.io/)
+- [Numpy](https://numpy.org/)
+
+### Autor
+
+---
+
+<a href="mailto:gustavo_martins@usp.br">
+<img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/47541227?v=4" width="100px;" alt=""/>
+<br />
+<sub><b>Gustavo de Oliveira Martins</b></sub></a> <a href="https://github.com/GustavoOM" title="ICMC USP">🐷</a>
+
+Feito com 💛 por Gustavo de Oliveira Martins 🥨 Entre em contato!
+
+[![Gmail Badge](https://img.shields.io/badge/-gustavo_martins@usp.br-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:gustavo_martins@usp.br)](mailto:gustavo_martins@usp.br)
