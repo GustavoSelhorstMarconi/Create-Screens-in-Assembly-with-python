@@ -12,11 +12,11 @@
 
 - [👉 Descrição](#Descrição-do-Projeto)
 - [👉 Funcionalidades](#Funcionalidades)
-- [👉 Aplicação](#🧩-Aplicação)
-- [👉 Vídeo Tutorial](#📽️-Vídeo-Tutorial)
-  - [Pre Requisitos](#📝-Pré-requisitos)
-- [👉 Ferramentas](#🛠-Ferramentas)
-- [👉 Autores](#🧑‍💻-Autores)
+- [👉 Aplicação](#Aplicação)
+- [👉 Vídeo Tutorial](#Vídeo-Tutorial)
+  - [Pre Requisitos](#Pré-requisitos)
+- [👉 Ferramentas](#Ferramentas)
+- [👉 Autores](#Autores)
 
   <!--te-->
 
@@ -24,7 +24,7 @@
 	🚧  Versão Beta  🚧
 </h4>
 
-### 🖥️ Funcionalidades
+### Funcionalidades
 
 - [x] Editar Caractere
 - [x] Gerar Charmap
@@ -34,17 +34,17 @@
 - [x] Apagar Tela
 - [x] Gerar Personagem
 
-### 🧩 Aplicação
+### Aplicação
 
 <h1 align="center">
   <img alt="Application Screen" title="#Application Screen" src="https://i.imgur.com/HKgMqQT.png" />
 </h1>
 
-### 📽️ Vídeo Tutorial
+### Vídeo Tutorial
 
 [Tutorial - Como usar a aplicação](https://youtu.be/vvJzQRh8cuU)
 
-### 📝 Pré-requisitos
+### Pré-requisitos
 
 <h2> Instalar no Windows </h2>
 ====== Instalar no Windows ======
@@ -119,7 +119,7 @@ python3 main.py
 Vídeo de instalação no Linux:
 [Tutorial - Como Instalar no Linux](https://youtu.be/hdT6XAhFqLY)
 
-### 🛠 Ferramentas
+### Ferramentas
 
 As seguintes ferramentas foram usadas na construção do projeto:
 
@@ -128,7 +128,7 @@ As seguintes ferramentas foram usadas na construção do projeto:
 - [Pillow](https://pillow.readthedocs.io/)
 - [Numpy](https://numpy.org/)
 
-### 🧑‍💻 Autores
+### Autores
 
 ---
 
