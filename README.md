@@ -50,12 +50,17 @@
 ====== Instalar no Windows ======
 
 1 - Instale o Python 3:
-(https://www.python.org/ftp/python/3.10.1/Python-3.10.1.tar.xz)
+[Python](https://www.python.org/ftp/python/3.10.1/Python-3.10.1.tar.xz)
 Baixei no dia 10/12/2021 caso tenha outra versão pode baixar a mais atual :D
 
 2 - Instale o PIP
-com o Python instalado precisamos baixar o pip que é um gerenciador de pacotes do Python, e para isso precisamos: - Apertar a tecla Home do Windows e procurar por CMD - Nessa telinha preta que abriu usar esse comando sem as aspas:
-"curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py" - Uma vez com os arquivos que o pip precisa para instalar vamos rodar um comando para intalar ele de fato, novamente sem as aspas:
+com o Python instalado precisamos baixar o pip que é um gerenciador de pacotes do Python, e para isso precisamos: - Apertar a tecla Home do Windows e procurar por CMD - Nessa telinha preta que abriu usar esse comando:
+
+```bash
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+```
+
+- Uma vez com os arquivos que o pip precisa para instalar vamos rodar um comando para instalar ele de fato:
 
 ```bash
 python get-pip.py
@@ -63,13 +68,19 @@ python get-pip.py
 
 3 - Instalar dependências com o PIP
 Para facilitar o desenvolvimento utilizamos algumas bibliotecas que precisam ser baixadas e que precisam ser instaladas com o PIP, execute os comandos abaixo
-"pip install pygame"
-"pip install image"
-"pip install numpy"
+
+```bash
+pip install pygame
+pip install image
+pip install numpy
+```
 
 4 - Executar o programa
 Para executar basta acessar o caminho da pasta do projeto no cmd e executar o seguinte comando:
-"python3 main.py"
+
+```bash
+python3 main.py
+```
 
 5 - Agora é só usar :D
 
@@ -83,16 +94,25 @@ Obs: Esse passo a passo servirá para a versão do linux Mint ou semelhantes com
 
 1 - Instale o PIP
 com o Python instalado precisamos baixar o pip que é um gerenciador de pacotes do Python, e para isso precisamos:
-"sudo apt install python3-pip"
+
+```bash
+sudo apt install python3-pip
+```
 
 2 - Instalar dependências com o PIP
 Para facilitar o desenvolvimento utilizamos algumas bibliotecas que precisam ser baixadas e que precisam ser instaladas com o PIP, execute os comandos abaixo
-"pip install pygame"
-"pip install numpy"
+
+```bash
+pip install pygame
+pip install numpy
+```
 
 3 - Executar o programa
 Para executar basta acessar o caminho da pasta do projeto e executar o seguinte comando:
-"python3 main.py"
+
+```bash
+python3 main.py
+```
 
 4 - Agora é só usar :D
 
