@@ -2,11 +2,11 @@
 
 <h1 align="center">Gerador de Tela Assembly - ICMC</h1>
 
-## Descrição do Projeto
+## 🖋️ Descrição do Projeto
 
 <p align="center">Esse é um projeto criado para servir de ferramenta na disciplina SSC0511 - Organização de Computadores Digitais, no qual temos que fazer um jogo em Assembly.<br>O projeto foi desenvolvido em Python usando principalmente a biblioteca pygame.</p>
 
-# 🖋️ Tabela de conteúdos
+# Tabela de conteúdos
 
 <!--ts-->
 
