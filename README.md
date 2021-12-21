@@ -10,24 +10,18 @@
 
 <!--ts-->
 
-- [Sobre](#Sobre)
-- [Tabela de Conteudo](#tabela-de-conteudo)
-- [Instalação](#instalacao)
-- [Como usar](#como-usar)
+- [Descrição](#Descrição do Projeto)
+- [Vídeo Tutorial](#Vídeo Tutorial)
+- [Funcionalidades](#Funcionalidades)
+- [Aplicação](#Aplicação)
   - [Pre Requisitos](#pre-requisitos)
-  - [Local files](#local-files)
-  - [Remote files](#remote-files)
-  - [Multiple files](#multiple-files)
-  - [Combo](#combo)
-- [Tests](#testes)
-- [Tecnologias](#tecnologias)
-<!--te-->
+  <!--te-->
 
 <h4 align="center"> 
 	🚧  Versão Beta  🚧
 </h4>
 
-### Features
+### Funcionalidades
 
 - [x] Editar Caractere
 - [x] Gerar Charmap
@@ -45,6 +39,7 @@
 
 ### Vídeo Tutorial
 
-<object width="425" height="344" data="https://youtu.be/vvJzQRh8cuU"></object>
-<object width="425" height="344" data="https://youtu.be/hdT6XAhFqLY"></object>
-<object width="425" height="344" data="https://youtu.be/LrDKQ516Ew0"></object>
+<a href=“https://youtu.be/vvJzQRh8cuU“>Tutorial - Como usar a aplicação</a>
+
+<a href=“https://youtu.be/hdT6XAhFqLY“>Flex Grid</a>
+<a href=“https://youtu.be/LrDKQ516Ew0“>Flex Grid</a>
