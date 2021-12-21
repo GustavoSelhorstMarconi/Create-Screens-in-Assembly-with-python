@@ -51,7 +51,7 @@
 <h2> Instalar no Windows </h2>
 
 1 - Instale o Python 3:
-[Python](https://www.python.org/ftp/python/3.10.1/Python-3.10.1.tar.xz)
+[Python](https://www.python.org/ftp/python/3.10.1/Python-3.10.1.tar.xz)<br>
 Baixei no dia 10/12/2021 caso tenha outra versão pode baixar a mais atual :D
 
 2 - Instale o PIP
