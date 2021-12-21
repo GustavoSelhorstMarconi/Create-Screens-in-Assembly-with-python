@@ -1,4 +1,4 @@
-![Gerador de Tela Assembly - ICMC](https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Webysther_20170627_-_Logo_ICMC-USP.svg/1200px-Webysther_20170627_-_Logo_ICMC-USP.svg.png)
+<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Webysther_20170627_-_Logo_ICMC-USP.svg/1200px-Webysther_20170627_-_Logo_ICMC-USP.svg.png" width= "55%" height= "55%"/>
 
 <h1 align="center">Gerador de Tela Assembly - ICMC</h1>
 
@@ -47,7 +47,6 @@
 ### Pré-requisitos
 
 <h2> Instalar no Windows </h2>
-====== Instalar no Windows ======
 
 1 - Instale o Python 3:
 [Python](https://www.python.org/ftp/python/3.10.1/Python-3.10.1.tar.xz)
@@ -88,7 +87,6 @@ Vídeo de instalação do Windows:
 [Tutorial - Como Instalar no Windows](https://youtu.be/LrDKQ516Ew0)<br>
 
 <h2> Instalar no Linux </h2>
-====== Instalar no Linux ======
 
 Obs: Esse passo a passo servirá para a versão do linux Mint ou semelhantes como ubuntu ou Debian
 
