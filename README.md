@@ -135,10 +135,12 @@ As seguintes ferramentas foram usadas na construção do projeto:
 Feito por Gustavo de Oliveira Martins e Gustavo Selhorst Marconi 🥨 Entre em contato!
 <br>
 
-<h2>Github Gustavo de Oliveira Martins:</h2>
-- [GustavoOM](https://github.com/GustavoOM)
+#### Github Gustavo de Oliveira Martins:
+
+[GustavoOM](https://github.com/GustavoOM)
 
 [![Gmail Badge](https://img.shields.io/badge/-gustavo_martins@usp.br-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:gustavo_martins@usp.br)](mailto:gustavo_martins@usp.br)
 
-<h2>Github Gustavo Selhorst Marconi:</h2>
-- [GustavoSelhorstMarconi](https://github.com/GustavoSelhorstMarconi)
+#### Github Gustavo Selhorst Marconi:
+
+[GustavoSelhorstMarconi](https://github.com/GustavoSelhorstMarconi)
