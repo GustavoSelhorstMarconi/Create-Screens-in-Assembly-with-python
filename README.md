@@ -11,7 +11,7 @@
 <!--ts-->
 
 - [👉 Descrição](#Descrição-do-Projeto)
-- [👉 Funcionalidades](#Funcionalidades)
+- [👉 Funcionalidades](#🖥️-Funcionalidades)
 - [👉 Aplicação](#🧩-Aplicação)
 - [👉 Vídeo Tutorial](#📽️-Vídeo-Tutorial)
   - [Pre Requisitos](#📝-Pré-requisitos)
@@ -24,7 +24,7 @@
 	🚧  Versão Beta  🚧
 </h4>
 
-### Funcionalidades
+### 🖥️ Funcionalidades
 
 - [x] Editar Caractere
 - [x] Gerar Charmap
