@@ -56,7 +56,7 @@ Baixei no dia 10/12/2021 caso tenha outra versão pode baixar a mais atual :D
 2 - Instale o PIP
 com o Python instalado precisamos baixar o pip que é um gerenciador de pacotes do Python, e para isso precisamos: - Apertar a tecla Home do Windows e procurar por CMD - Nessa telinha preta que abriu usar esse comando sem as aspas:
 "curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py" - Uma vez com os arquivos que o pip precisa para instalar vamos rodar um comando para intalar ele de fato, novamente sem as aspas:
-"python get-pip.py"
+$ python get-pip.py
 
 3 - Instalar dependências com o PIP
 Para facilitar o desenvolvimento utilizamos algumas bibliotecas que precisam ser baixadas e que precisam ser instaladas com o PIP, execute os comandos abaixo
@@ -115,7 +115,6 @@ As seguintes ferramentas foram usadas na construção do projeto:
 <sub><b>Gustavo de Oliveira Martins</b></sub></a> <a href="https://github.com/GustavoOM" title="ICMC USP">🐷</a>
 
 <img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/65550084?v=4" width="100px;" alt=""/>
-<br />
 <sub><b>Gustavo Selhosrt Marconi</b></sub></a> <a href="https://github.com/GustavoSelhorstMarconi"></a>
 
 Feito com 💛 por Gustavo de Oliveira Martins e Gustavo Selhorst Marconi 🥨 Entre em contato!
