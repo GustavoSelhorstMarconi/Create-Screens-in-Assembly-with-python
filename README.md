@@ -14,7 +14,7 @@
 - [👉 Funcionalidades](#Funcionalidades)
 - [👉 Aplicação](#Aplicação)
 - [👉 Vídeo Tutorial](#Vídeo-Tutorial)
-  - [Pre Requisitos](#Pré-requisitos)
+  - [Pré Requisitos](#Pré-requisitos)
 - [👉 Ferramentas](#Ferramentas)
 - [👉 Autores](#Autores)
 
@@ -132,10 +132,11 @@ As seguintes ferramentas foram usadas na construção do projeto:
 
 ---
 
-<sub><b>Gustavo de Oliveira Martins</b></sub></a> <a href="https://github.com/GustavoOM" title="ICMC USP">🐷</a>
+Feito por Gustavo de Oliveira Martins e Gustavo Selhorst Marconi 🥨 Entre em contato!
+Gustavo de Oliveira Martins
+<sub><b>GustavoOM</b></sub></a> <a href="https://github.com/GustavoOM"></a>
 
-<sub><b>Gustavo Selhosrt Marconi</b></sub></a> <a href="https://github.com/GustavoSelhorstMarconi"></a>
-
-Feito com 💛 por Gustavo de Oliveira Martins e Gustavo Selhorst Marconi 🥨 Entre em contato!
+Github Gustavo Selhorst Marconi
+<sub><b>GustavoSelhorstMarconi</b></sub></a> <a href="https://github.com/GustavoSelhorstMarconi"></a>
 
 [![Gmail Badge](https://img.shields.io/badge/-gustavo_martins@usp.br-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:gustavo_martins@usp.br)](mailto:gustavo_martins@usp.br)
