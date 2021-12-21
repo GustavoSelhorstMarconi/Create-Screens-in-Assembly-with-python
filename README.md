@@ -15,7 +15,7 @@
 - [👉 Aplicação](#🧩-Aplicação)
 - [👉 Vídeo Tutorial](#📽️-Vídeo-Tutorial)
   - [Pre Requisitos](#📝-Pré-requisitos)
-- [👉 Ferramentas](#🛠-Tecnologias)
+- [👉 Ferramentas](#🛠-Ferramentas)
 - [👉 Autores](#🧑‍💻-Autores)
 
   <!--te-->
@@ -119,7 +119,7 @@ python3 main.py
 Vídeo de instalação no Linux:
 [Tutorial - Como Instalar no Linux](https://youtu.be/hdT6XAhFqLY)
 
-### 🛠 Tecnologias
+### 🛠 Ferramentas
 
 As seguintes ferramentas foram usadas na construção do projeto:
 
