@@ -10,8 +10,8 @@
 
 <!--ts-->
 
-- [Descrição](#Descrição do Projeto)
-- [Vídeo Tutorial](#Vídeo Tutorial)
+- [Descrição](#Descrição-do-Projeto)
+- [Vídeo Tutorial](#Vídeo-Tutorial)
 - [Funcionalidades](#Funcionalidades)
 - [Aplicação](#Aplicação)
   - [Pre Requisitos](#pre-requisitos)
