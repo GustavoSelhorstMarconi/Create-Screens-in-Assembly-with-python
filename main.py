@@ -99,7 +99,7 @@ class CharacterSelected(pygame.sprite.Sprite):
 
     self.index_charmap = 0
     self.fontetxt = pygame.font.SysFont('None', 40)
-    self.fonte_label = pygame.font.SysFont('Arial', 15)
+    self.fonte_label = pygame.font.Font(None, 20)
     self.fontetxt_index_and_color = pygame.font.SysFont('None', 30)
 
   def updateColor(self, color):
@@ -133,32 +133,24 @@ class CharacterSelected(pygame.sprite.Sprite):
   
   def display_text(self):
     fonte_render = self.fontetxt.render(str(self.index_charmap), True, (30, 30, 30))
-    fonte_rect = fonte_render.get_rect(center = (873, 260))
+    fonte_rect = fonte_render.get_rect(center = (873, 240))
     screen.blit(fonte_render, fonte_rect)
 
     fonte_render = self.fonte_label.render('Index', True, (30, 30, 30))
     fonte_rect = fonte_render.get_rect(center = (873, 220))
     screen.blit(fonte_render, fonte_rect)
 
-    fonte_render = self.fonte_label.render('Charmap', True, (30, 30, 30))
-    fonte_rect = fonte_render.get_rect(center = (873, 235))
-    screen.blit(fonte_render, fonte_rect)
-
     # Text charmap + color
     fonte_render = self.fonte_label.render('Index', True, (30, 30, 30))
-    fonte_rect = fonte_render.get_rect(center = (873, 285))
-    screen.blit(fonte_render, fonte_rect)
-
-    fonte_render = self.fonte_label.render('Charmap', True, (30, 30, 30))
-    fonte_rect = fonte_render.get_rect(center = (873, 300))
+    fonte_rect = fonte_render.get_rect(center = (873, 280))
     screen.blit(fonte_render, fonte_rect)
 
     fonte_render = self.fonte_label.render('+ cor', True, (30, 30, 30))
-    fonte_rect = fonte_render.get_rect(center = (873, 315))
+    fonte_rect = fonte_render.get_rect(center = (873, 290))
     screen.blit(fonte_render, fonte_rect)
 
     fonte_render = self.fontetxt_index_and_color.render(str(self.index_charmap + self.color * 256), True, (30, 30, 30))
-    fonte_rect = fonte_render.get_rect(center = (873, 340))
+    fonte_rect = fonte_render.get_rect(center = (873, 310))
     screen.blit(fonte_render, fonte_rect)
 
   def update(self):
