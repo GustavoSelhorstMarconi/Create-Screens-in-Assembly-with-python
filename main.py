@@ -258,7 +258,7 @@ class Button(pygame.sprite.Sprite):
   
   def generateScreen(self):
     if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
-      correctTitle = user_text.capitalize().replace(" ", "")
+      correctTitle = user_text.replace(" ", "")
       if correctTitle == "":
         correctTitle = "Screen"
       newpath = r'screens'
@@ -311,7 +311,7 @@ class Button(pygame.sprite.Sprite):
   
   def generatePersona(self):
     if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
-      correctTitle = user_text.capitalize().replace(" ", "")
+      correctTitle = user_text.replace(" ", "")
       if correctTitle == "":
         correctTitle = "Persona"
       persona = []
@@ -346,7 +346,7 @@ class Button(pygame.sprite.Sprite):
       personaFile.writelines(f'\n  print{correctTitle}Loop:\n    add R5,R0,R4\n    loadi R5, R5\n')
       personaFile.writelines(f'\n    add R6,R1,R4\n    loadi R6, R6\n\n    add R2, R2, R6\n\n    outchar R5, R2\n')
       personaFile.writelines(f'\n    inc R2\n     inc R4\n     cmp R3, R4\n    jne print{correctTitle}Loop\n')
-      personaFile.writelines(f'\n  pop R0\n  pop R1\n  pop R2\n  pop R3\n  pop R4\n  pop R5\n  pop R6\n  rts\n')
+      personaFile.writelines(f'\n  pop R6\n  pop R5\n  pop R4\n  pop R3\n  pop R2\n  pop R1\n  pop R0\n  rts\n')
 
       personaFile.writelines(f'\napagar{correctTitle}:\n  push R0\n  push R1\n  push R2\n  push R3\n  push R4\n  push R5\n')
       personaFile.writelines(f'\n  loadn R0, #3967\n  loadn R1, #{correctTitle}Gaps\n  load R2, {correctTitle}Position\n')
